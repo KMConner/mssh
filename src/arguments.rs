@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser, PartialEq)]
-#[clap(name = "struct", author, about, version)]
+#[clap(about, version)]
 pub struct Cli {
     #[clap(subcommand)]
     command: Commands,

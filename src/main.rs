@@ -1,5 +1,8 @@
 mod arguments;
 
 fn main() {
-    println!("Hello, world!");
+    let cli = match arguments::parse() {
+        Ok(c) => c,
+        Err(e) => e.exit()
+    };
 }
