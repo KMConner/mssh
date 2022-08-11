@@ -11,9 +11,9 @@ pub struct Cli {
 #[derive(Debug, Subcommand, PartialEq)]
 enum Commands {
     Exec {
-        #[clap(multiple_occurrences = true, required = true)]
+        #[clap(multiple_occurrences = true, required = true, forbid_empty_values = true)]
         servers: Vec<String>,
-        #[clap(long, short = 'f')]
+        #[clap(long, short = 'f', forbid_empty_values = true)]
         file: Option<PathBuf>,
     },
     Cp {},
@@ -72,6 +72,18 @@ mod test {
         #[test]
         fn error_on_no_servers() {
             let cli = Cli::try_parse_from(vec!["mssh", "exec", "-f", "run.sh"]);
+            assert_eq!(cli.is_err(), true);
+        }
+
+        #[test]
+        fn error_on_empty_server() {
+            let cli = Cli::try_parse_from(vec!["mssh", "exec", "-f", "run.sh", ""]);
+            assert_eq!(cli.is_err(), true);
+        }
+
+        #[test]
+        fn error_on_empty_file_name() {
+            let cli = Cli::try_parse_from(vec!["mssh", "exec", "-f", "", "server1"]);
             assert_eq!(cli.is_err(), true);
         }
     }
